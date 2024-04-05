@@ -8,7 +8,7 @@ interface Props {}
 const App: React.FC<Props> = () => {
     const {
         state: { tasks },
-        funcs: { insertTask },
+        funcs: { startTask, endTask },
     } = useTasks();
 
     return (
@@ -16,7 +16,8 @@ const App: React.FC<Props> = () => {
             <div className='row-start-1 col-span-2 bg-grey-dark'></div>
             <Timer
                 className='col-start-3 col-end-6'
-                recordTaskTime={insertTask}
+                onStartTask={startTask}
+                onStopTask={endTask}
             />
             <TaskList
                 className='col-start-1 col-span-full'

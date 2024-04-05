@@ -50,26 +50,33 @@ const TaskList: React.FC<Props> = ({ tasks, options, className }) => {
                     </tr>
                 </thead>
                 <tbody className='overflow-y-auto bg-grey-dark [&_td]:py-2 [&_td]:text-ellipsis '>
-                    {tasks.map((elem, i) => {
-                        const [hrs, mins] = convert(elem.elapsedTime);
-                        let start = new Date(elem.startTime).toLocaleTimeString(
-                            "en-us",
-                            { timeStyle: "medium" }
-                        );
-                        let end = new Date(elem.endTime).toLocaleTimeString(
-                            "en-us",
-                            {
-                                timeStyle: "medium",
-                            }
-                        );
+                    {tasks.map(
+                        ({ startTime, endTime, elapsedTime, title, id }, i) => {
+                            let elapsed = "N/A",
+                                end = "N/A",
+                                start = new Date(startTime).toLocaleTimeString(
+                                    "en-us",
+                                    {
+                                        timeStyle: "medium",
+                                    }
+                                );
 
-                        let elapsed = `${hrs} hr`;
-                        if (mins) elapsed += ` ${mins} m`;
-                        return (
-                            <tr
-                                key={i}
-                                onClick={() => setSelectedIndex(i)}
-                                className={`
+                            if (elapsedTime && endTime) {
+                                const [hrs, mins] = convert(elapsedTime);
+
+                                end = new Date(endTime).toLocaleTimeString(
+                                    "en-us",
+                                    { timeStyle: "medium" }
+                                );
+                                elapsed = `${hrs} hr`;
+                                if (mins) elapsed += ` ${mins} m`;
+                            }
+
+                            return (
+                                <tr
+                                    key={id || i}
+                                    onClick={() => setSelectedIndex(i)}
+                                    className={`
                                 text-grey-light text-xs lg:text-base font-normal 
                                 bg-grey-light bg-opacity-0 even:bg-opacity-[.08] 
                                 hover:bg-opacity-20 hover:text-white 
@@ -78,17 +85,20 @@ const TaskList: React.FC<Props> = ({ tasks, options, className }) => {
                                         ? "bg-opacity-20 text-white"
                                         : ""
                                 }`}
-                            >
-                                {options?.showTaskNumber && <td>{i + 1}</td>}
-                                <td className='max-w-12 overflow-hidden'>
-                                    {elem.title}
-                                </td>
-                                <td>{start}</td>
-                                <td>{end}</td>
-                                <td>{elapsed}</td>
-                            </tr>
-                        );
-                    })}
+                                >
+                                    {options?.showTaskNumber && (
+                                        <td>{i + 1}</td>
+                                    )}
+                                    <td className='max-w-12 overflow-hidden'>
+                                        {title}
+                                    </td>
+                                    <td>{start}</td>
+                                    <td>{end}</td>
+                                    <td>{elapsed}</td>
+                                </tr>
+                            );
+                        }
+                    )}
                 </tbody>
             </table>
         </div>

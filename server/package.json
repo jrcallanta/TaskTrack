@@ -7,6 +7,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js",
+        "build": "cd ../client && npm run astro build",
+        "build:start": "npm run build && npm start",
         "dev": "nodemon index.js --config ./nodemon.json"
     },
     "author": "",

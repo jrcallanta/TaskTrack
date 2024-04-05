@@ -29,7 +29,31 @@ export const postTask: (newTask: TaskType) => Promise<TaskType[]> = async (
         .then((res) => res.json())
         .catch((err) => console.log(err));
 
-    console.log(data);
+    if (!data.error) {
+        try {
+            const tasks: TaskType[] = data.tasks;
+            return tasks;
+        } catch (err) {
+            console.log(err);
+            return [];
+        }
+    }
+
+    return [];
+};
+
+export const patchTask: (updatedTask: TaskType) => Promise<TaskType[]> = async (
+    updatedTask
+) => {
+    const data = await fetch("/api/tasks/", {
+        body: JSON.stringify({ updatedTask: updatedTask }),
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((res) => res.json())
+        .catch((err) => console.log(err));
 
     if (!data.error) {
         try {
