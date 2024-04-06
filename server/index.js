@@ -25,4 +25,8 @@ app.get("*", (req, res) => {
 /* Listen */
 app.listen(PORT, () => {
     console.log("App is running on port: " + PORT);
+    console.log(`TaskTimer: http://localhost:${PORT}`);
+}).on("error", (error) => {
+    if (error.code == "EADDRINUSE")
+        console.log(`Port ${PORT} is already being used.`);
 });
