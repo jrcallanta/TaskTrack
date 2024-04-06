@@ -44,6 +44,7 @@ const Timer: React.FC<Props> = ({ className, onStartTask, onStopTask }) => {
                             taskState: TaskState.STOPPED,
                         };
                     }
+                    return { ...prev, taskState: TaskState.STOPPED };
                 }
                 case "START_NEXT_TASK": {
                     if (prev.taskStartTime) {
@@ -58,6 +59,7 @@ const Timer: React.FC<Props> = ({ className, onStartTask, onStopTask }) => {
                             taskState: TaskState.RUNNING,
                         };
                     }
+                    break;
                 }
                 default: {
                 }
