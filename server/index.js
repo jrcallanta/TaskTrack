@@ -1,32 +1,39 @@
+// Load environment variables from .env file
 import { config } from "dotenv";
 config();
 
-const PORT = 8080;
-
+// Import necessary modules
+import portfinder from "portfinder";
+import express, { urlencoded } from "express";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import apiRouter from "./api/router.js";
+
+// Set up the directory path
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-/* Create App */
-import express, { urlencoded } from "express";
+// Create and configure the Express app
 const app = express();
 app.use(urlencoded({ extended: true }));
 
-/* Attach Api */
-import api from "./api/router.js";
-app.use("/api", api);
-
-/* Attach Frontend */
+// Attach API and frontend routes
+app.use("/api", apiRouter);
 app.use(express.static(path.resolve(__dirname, "../client/dist/")));
 app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
 });
 
-/* Listen */
-app.listen(PORT, () => {
-    console.log("App is running on port: " + PORT);
-    console.log(`TaskTimer: http://localhost:${PORT}`);
-}).on("error", (error) => {
-    if (error.code == "EADDRINUSE")
-        console.log(`Port ${PORT} is already being used.`);
+// Find an available port and start the server
+portfinder.getPort((err, port) => {
+    if (err) {
+        // If an error occurs, log it and exit the process
+        console.log(err);
+        process.exit(1);
+    }
+
+    // Start the server on the available port
+    app.listen(port, () => {
+        console.log("App is running on port: " + port);
+        console.log(`TaskTimer: http://localhost:${port}`);
+    });
 });
